@@ -1,18 +1,6 @@
 <template>
 <div class="">
-   <!-- //SECTION - Alert -->
-   <v-alert
-      :type="alertType"
-      :color="alertColor"
-      :icon="alertIcon"
-      dismissible
-      text
-      transition="fade-transition"
-      :value="alertTrigger"
-      >
-      <span id="alertMessage"></span>
-   </v-alert>
-   <!-- //!SECTION -->
+   <app-alert/>
 
    <!-- //SECTION - Status Filter & New Data Btn -->
    <div class="d-flex align-center flex-wrap">
@@ -79,7 +67,7 @@
 
    <!-- //SECTION -  Data Table-->
    <v-data-table
-      :headers="headers"
+      :headers="tableHeader"
       :items="items"
       :page-sync="current"
       :loading="loading"
@@ -134,37 +122,15 @@
    </div>
    <!-- //!SECTION -->
 
-   <!-- //SECTION - Snackbar -->
-   <v-snackbar
-      v-model="snackbar"
-      :color="snackbarColor"
-      text
-   >
-      {{ snackbarText }}
-
-      <template #action="{ attrs }">
-         <v-btn
-            :color="snackbarColor"
-            text
-            v-bind="attrs"
-            @click="snackbar = false"
-         >
-            Tutup
-         </v-btn>
-      </template>
-   </v-snackbar>
-   <!-- //!SECTION -->
+   <app-snackbar/>
 </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
    name: 'DataTable',
    props: {
-      headers: {
-         type: Array,
-         default: () => {}
-      },
       items: {
          type: Array,
          default: () => {}
@@ -208,27 +174,11 @@ export default {
          status: [],
          categories: [],
          dataTypes: [],
-         
-         alertType: null,
-         alertColor: null,
-         alertIcon: null,
-         alertMessage: null,
-         alertTrigger: false,
-
-         snackbarText: '',
-         snackbar: false,
-         snackbarColor: '',
       }
    },
 
-   watch: {
-      alertTrigger() {
-         if (this.alertTrigger === true) {
-            setTimeout(() => {
-               this.onTriggeredAlert()
-            }, 5000)
-         }
-      },
+   computed: {
+      ...mapState(['tableHeader'])
    },
 
    async mounted() {
@@ -280,14 +230,19 @@ export default {
                document.body.appendChild(link)
                link.click()
                document.body.removeChild(link)
-               this.snackbarText = 'File berhasil diunduh.'
-               this.snackbarColor = 'green darken-3'
-               this.snackbar = true
+
+               this.$store.dispatch('setSnackbar', {
+                  text: 'File berhasil diunduh',
+                  color: 'green darken-3'
+               })
             })
          } catch (e) {
-            this.snackbarText = 'File tidak ditemukan.'
-            this.snackbarColor = 'red darken-2'
-            this.snackbar = true
+            this.$store.dispatch('setSnackbar', {
+               text: 'File tidak ditemukan',
+               color: 'red darken-2'
+            })
+         } finally {
+            this.$store.dispatch('showSnackbar')
          }
       },
    }

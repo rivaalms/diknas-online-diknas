@@ -3,18 +3,7 @@
       <div class="mb-6">
          <div class="d-flex justify-space-between align-center mt-5 mb-8">
             <p class="text-h6 mb-0">Statistik Sekolah</p>
-            <v-breadcrumbs
-               :items="breadcrumb"
-               class="px-0 py-2"
-            >
-               <template #item="{item}">
-                  <v-breadcrumbs-item
-                     exact
-                     :to="item.href"
-                     :disabled="item.disabled"
-                  >{{ item.text }}</v-breadcrumbs-item>
-               </template>
-            </v-breadcrumbs>
+            <app-breadcrumb/>
          </div>
          <v-row dense>
             <v-col cols="12">
@@ -36,14 +25,9 @@
    </template>
    
    <script>
-   import schoolsTable from '@/pages/components/schoolsTable'
-   
    export default {
-      components: { schoolsTable },
-   
       data() {
          return {
-            user: this.$auth.user,
             headers: [
                {
                   text: 'Nama Sekolah',
@@ -78,16 +62,13 @@
          }
       },
    
-      computed: {
-         breadcrumb() {
-            const data = [
-               {text: 'Dashboard', disabled: false, href: '/'},
-               {text: 'Statistik Sekolah Binaan', disabled: true, href: '/school'}
-            ]
-            return data
-         }
+      created() {
+         this.$store.dispatch('setBreadcrumb', [
+            { text: 'Dashboard', disabled: false, href: '/' },
+            { text: 'Statistik Sekolah Binaan', disabled: true, 'href': '/school' }
+         ])
       },
-   
+      
       async mounted() {
          await this.getSchools()
       },

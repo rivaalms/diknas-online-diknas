@@ -3,29 +3,10 @@
       <div class="mb-6">
          <div class="d-flex justify-space-between align-center mt-5 mb-8">
             <p class="text-h6 mb-0">Profil Akun</p>
-            <v-breadcrumbs
-               :items="breadcrumb"
-               class="px-0 py-2"
-            >
-               <template #item="{item}">
-                  <v-breadcrumbs-item
-                     exact
-                     :to="item.href"
-                     :disabled="item.disabled"
-                  >{{ item.text }}</v-breadcrumbs-item>
-               </template>
-            </v-breadcrumbs>
+            <app-breadcrumb/>
          </div>
 
-         <v-alert
-            :type="alertType"
-            dismissible
-            text
-            transition="fade-transition"
-            :value="alertTrigger"
-         >
-            {{ alertMessage }}
-         </v-alert>
+         <app-alert/>
          
          <v-row dense class="align-stretch">
             <v-col cols="12" md="8">
@@ -43,13 +24,6 @@
                               <p class="text-subtitle-2 blue--text">{{ user.nip }}</p>
                            </div>
                         </v-col>
-                        <!-- <v-col cols="12" md="6">
-                           <v-row dense>
-                              <v-col cols="6">
-   
-                              </v-col>
-                           </v-row>
-                        </v-col> -->
                      </v-row>
                   </v-card-text>
                </v-card>
@@ -158,12 +132,6 @@
             targetItem: [],
             passwordShow: [],
    
-            alertType: null,
-            alertIcon: null,
-            alertColor: null,
-            alertMessage: null,
-            alertTrigger: false,
-   
             passwordAlertTrigger: false,
             passwordAlertColor: '',
             passwordAlertMessage: '',
@@ -195,25 +163,9 @@
             ]
             return data
          },
-   
-         breadcrumb() {
-            const data = [
-               {text: 'Dashboard', disabled: false, href: '/'},
-               {text: 'Profil Akun', disabled: true, href: '/profile'},
-            ]
-            return data
-         }
       },
    
       watch: {
-         alertTrigger() {
-            if (this.alertTrigger === true) {
-               setTimeout(() => {
-                  this.dismissAlert()
-               }, 5000)
-            }
-         },
-   
          passwordAlertTrigger() {
             if (this.passwordAlertTrigger === true) {
                setTimeout(() => {
@@ -221,6 +173,13 @@
                }, 5000)
             }
          }
+      },
+
+      created() {
+         this.$store.dispatch('setBreadcrumb', [
+            { text: 'Dashboard', disabled: false, href: '/' },
+            { text: 'Profil', disabled: true, href: '/profile' }
+         ])
       },
    
       async mounted() {
@@ -270,12 +229,15 @@
             if (this.$refs.form.validate()) {
                try {
                   await this.$axios.put(`/diknas/updatepassword/${this.$auth.user.id}`, this.targetItem).then((resp) => {
+                     this.$store.dispatch('setAlert', {
+                        type: 'info',
+                        icon: 'mdi-information',
+                        color: 'cyan',
+                        message: 'Kata sandi akun berhasil diubah'
+                     })
+                  }).finally(() => {
                      this.closeDialog()
-                     this.alertType = 'info'
-                     this.alertIcon = 'mdi-information'
-                     this.alertColor = 'cyan'
-                     this.alertMessage = 'Kata sandi akun berhasil diubah'
-                     this.alertTrigger = true
+                     this.$store.dispatch('showAlert')
                   })
                } catch (e) {
                   this.passwordAlertType = 'error'
