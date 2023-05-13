@@ -62,6 +62,19 @@
             @input="dataHandler()"
          ></v-select>
       </v-col> -->
+      <v-col cols="6" md="2">
+         <v-select
+            v-model="year"
+            :items="yearList"
+            item-text="year"
+            item-value="year"
+            label="Tahun Ajaran"
+            clearable
+            hide-details="auto"
+            class="pt-0 mt-0"
+            @input="dataHandler()"
+         ></v-select>
+      </v-col>
    </div>
    <!-- //!SECTION -->
 
@@ -169,11 +182,13 @@ export default {
          statusId: null,
          categoryId: null,
          dataTypeId: null,
+         year: null,
 
          schools: [],
          status: [],
          categories: [],
          dataTypes: [],
+         yearList: [],
       }
    },
 
@@ -189,11 +204,17 @@ export default {
       await this.$axios.get(`/diknas/getAllSchool`).then((resp) => {
          this.schools = resp.data.data
       })
+
+      await this.$axios.get('/getDataYear', { params: {
+         user_id: this.$auth.user.id
+      }}).then((resp) => {
+         this.yearList = resp.data.data
+      })
    },
 
    methods: {
       dataHandler() {
-         this.$emit('data-handler', this.current, this.statusId, this.schoolId, this.categoryId, this.dataTypeId)
+         this.$emit('data-handler', this.current, this.statusId, this.schoolId, this.year)
       },
       
       getColor(status) {
