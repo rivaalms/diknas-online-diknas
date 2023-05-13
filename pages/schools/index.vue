@@ -15,6 +15,13 @@
                      <schools-table
                         :headers="headers"
                         :items="data.data"
+                        :current-page="data.current_page"
+                        :total-page="data.last_page"
+                        :loading="loading"
+                        :from="data.from"
+                        :to="data.to"
+                        :total="data.total"
+                        @data-handler="(current) => getSchools(current)"
                      />
                   </v-card-text>
                </v-card>
@@ -59,6 +66,7 @@
                }
             ],
             data: [],
+            loading: false,
          }
       },
    
@@ -74,9 +82,15 @@
       },
    
       methods: {
-         async getSchools() {
-            await this.$axios.get(`/diknas/getSchoolStats`).then((resp) => {
+         async getSchools(current) {
+            this.loading = true
+            await this.$axios.get(`/diknas/getSchoolStats`, {
+               params: {
+                  page: current
+               }
+            }).then((resp) => {
                this.data = resp.data.data
+               this.loading = false
             })
          }
       }

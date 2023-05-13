@@ -30,6 +30,19 @@
          </template>
          <!-- //!SECTION -->
       </v-data-table>
+      <div v-if="items" class="d-flex justify-space-between align-center">
+         <p class="text-caption mb-0">
+            {{ from }}-{{ to }} dari {{ total }} data
+         </p>
+         <v-pagination
+            v-model="current"
+            :length="totalPage"
+            total-visible="7"
+            prev-icon="mdi-menu-left"
+            next-icon="mdi-menu-right"
+            @input="dataHandler()"
+         ></v-pagination>
+      </div>
       <!-- //!SECTION -->
    
       <lazy-school-detail-dialog/>
@@ -48,6 +61,10 @@
             default: () => {}
          },
          currentPage: {
+            type: Number,
+            default: 0
+         },
+         totalPage: {
             type: Number,
             default: 0
          },
@@ -71,7 +88,7 @@
    
       data() {
          return {
-            current: this.currentPage ?? 1,
+            current: this.currentPage ? this.currentPage : 1,
             dialogTrigger: false,
             targetItem: [],
             tab: null,
@@ -140,6 +157,10 @@
             })
             this.$store.dispatch('showDialog')
          },
+
+         dataHandler() {
+            this.$emit('data-handler', this.current)
+         }
       }
    }
    </script>
