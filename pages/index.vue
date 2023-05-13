@@ -25,6 +25,33 @@
                </v-card-text>
             </v-card>
          </v-col>
+         <v-col cols="12">
+            <v-card flat>
+               <v-card-title class="text-subtitle-1">
+                  Kategori Data
+               </v-card-title>
+               <v-card-text>
+                  <v-row dense>
+                     <v-col
+                        v-for="item in categories"
+                        :key="item.slug"
+                        cols="3" sm="4" md="2">
+                        <v-card
+                           flat
+                           outlined
+                           class="v-btn text-capitalize"
+                           router exact
+                           :to="{name: 'category-slug', params: { slug: item.slug }}"
+                        >
+                           <v-card-text>
+                              {{ item.name }}
+                           </v-card-text>
+                        </v-card>
+                     </v-col>
+                  </v-row>
+               </v-card-text>
+            </v-card>
+         </v-col>
       </v-row>
    </div>
 </v-container>
@@ -40,6 +67,7 @@ export default {
 
          data: [],
          loading: true,
+         categories: []
       }
    },
 
@@ -53,6 +81,9 @@ export default {
       await this.$axios.get(`/diknas/getData`).then((resp) => {
          this.data = resp.data.data
          this.loading = false
+      })
+      await this.$axios.get(`/getCategories`).then((resp) => {
+         this.categories = resp.data.data
       })
    },
 
