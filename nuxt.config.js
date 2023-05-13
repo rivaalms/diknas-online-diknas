@@ -51,9 +51,6 @@ export default {
   auth: {
     strategies: {
       local: {
-        // cookie: {
-        //   name: 'supervisor',
-        // },
         endpoints: {
           login: { url: '/diknas/login', method: 'post', propertyName: 'data' },
           logout: { url: '/diknas/logout', method: 'post' },
@@ -65,8 +62,6 @@ export default {
           required: true,
           type: 'Bearer'
         },
-        // tokenRequired: true,
-        // tokenType: 'Bearer '
       }
     },
     redirect: {
@@ -109,4 +104,8 @@ export default {
   env: {
     DIKNAS_ONLINE_API_URL: 'http://diknas-online-api.test'
   },
+
+  server: {
+    port: 4500
+  }
 }
