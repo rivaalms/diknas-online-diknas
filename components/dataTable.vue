@@ -7,18 +7,23 @@
       <div class="me-2">
          <p class="mb-0 text-subtitle-2">Filter:</p>
       </div>
-      <v-col cols="6" md="2">
-         <v-select
+      <v-col cols="3">
+         <v-autocomplete
             v-model="schoolId"
             :items="schools"
+            :loading="schoolFilterLoading"
+            :search-input.sync="schoolInputSync"
+            hide-no-data
+            hide-selected
             item-text="name"
             item-value="id"
             label="Sekolah"
+            placeholder="Ketik untuk mencari"
             clearable
             hide-details="auto"
             class="pt-0 mt-0"
             @input="dataHandler()"
-         ></v-select>
+         ></v-autocomplete>
       </v-col>
 
       <!-- <v-col cols="6" md="2">
@@ -62,7 +67,7 @@
             @input="dataHandler()"
          ></v-select>
       </v-col> -->
-      <v-col cols="6" md="2">
+      <!-- <v-col cols="6" md="2">
          <v-select
             v-model="year"
             :items="yearList"
@@ -74,6 +79,20 @@
             class="pt-0 mt-0"
             @input="dataHandler()"
          ></v-select>
+      </v-col> -->
+      <v-col cols="3">
+         <v-text-field
+            v-model="year"
+            label="Tahun ajaran"
+            clearable
+            append-icon="mdi-magnify"
+            hide-details="auto"
+            class="pt-0 mt-0"
+            placeholder="Enter untuk mencari"
+            @keydown.enter="dataHandler()"
+            @click:clear="emptyYearDataHandler()"
+            @click:append="dataHandler()"
+         ></v-text-field>
       </v-col>
    </div>
    <!-- //!SECTION -->
@@ -183,6 +202,8 @@ export default {
          categoryId: null,
          dataTypeId: null,
          year: null,
+         schoolFilterLoading: false,
+         schoolInputSync: null,
 
          schools: [],
          status: [],
@@ -196,25 +217,35 @@ export default {
       ...mapState(['tableHeader'])
    },
 
+   watch: {
+      schoolInputSync(val) {
+         if (this.schools.length > 0) return
+         if (this.schoolFilterLoading) return
+         this.schoolFilterLoading = true
+         this.$axios.get('/searchSchoolFilter').then((resp) => {
+            this.schools = resp.data.data
+         }).catch((e) => {
+            console.log(e)
+         }).finally(() => {
+            this.schoolFilterLoading = false
+         })
+      },
+   },
+
    async mounted() {
       await this.$axios.get(`/getStatus`).then((resp) => {
          this.status = resp.data.data
-      })
-
-      await this.$axios.get(`/diknas/getAllSchool`).then((resp) => {
-         this.schools = resp.data.data
-      })
-
-      await this.$axios.get('/getDataYear', { params: {
-         user_id: this.$auth.user.id
-      }}).then((resp) => {
-         this.yearList = resp.data.data
       })
    },
 
    methods: {
       dataHandler() {
          this.$emit('data-handler', this.current, this.statusId, this.schoolId, this.year)
+      },
+
+      emptyYearDataHandler() {
+         this.year = null
+         this.dataHandler()
       },
       
       getColor(status) {
