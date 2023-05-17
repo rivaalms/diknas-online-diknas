@@ -21,7 +21,7 @@
                         :from="data.from"
                         :to="data.to"
                         :total="data.total"
-                        @data-handler="(current) => getSchools(current)"
+                        @data-handler="(current, school_id) => getSchools(current, school_id)"
                      />
                   </v-card-text>
                </v-card>
@@ -82,11 +82,12 @@
       },
    
       methods: {
-         async getSchools(current) {
+         async getSchools(current, schoolId) {
             this.loading = true
             await this.$axios.get(`/diknas/getSchoolStats`, {
                params: {
-                  page: current
+                  page: current,
+                  school: schoolId,
                }
             }).then((resp) => {
                this.data = resp.data.data
