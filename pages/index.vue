@@ -6,6 +6,19 @@
          <app-breadcrumb/>
       </div>
       <v-row dense>
+         <v-col
+            v-for="item in schoolSupervisorCount"
+            :key="item"
+         >
+         <v-card flat>
+            <v-card-title class="text-subtitle-1">
+               {{ item.title }}
+            </v-card-title>
+            <v-card-text class="text-h4 font-weight-medium grey--text text--darken-3">
+               {{ item.value }}
+            </v-card-text>
+         </v-card>
+         </v-col>
          <v-col cols="12">
             <v-card flat>
                <v-card-title class="text-subtitle-1">
@@ -67,7 +80,8 @@ export default {
 
          data: [],
          loading: true,
-         categories: []
+         categories: [],
+         schoolSupervisorCount: [],
       }
    },
 
@@ -84,6 +98,9 @@ export default {
       })
       await this.$axios.get(`/getCategories`).then((resp) => {
          this.categories = resp.data.data
+      })
+      await this.$axios.get('/diknas/getSchoolSupervisorCount').then((resp) => {
+         this.schoolSupervisorCount = resp.data.data
       })
    },
 
