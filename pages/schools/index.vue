@@ -6,6 +6,19 @@
             <app-breadcrumb/>
          </div>
          <v-row dense>
+            <v-col
+               v-for="(item, key) in countSchool"
+               :key="key"
+            >
+               <v-card flat>
+                  <v-card-title class="text-subtitle-1">
+                     {{ (key === 'total') ? 'Jumlah Sekolah' : (key === 'smp') ? 'SMP' : (key === 'sd') ? 'SD' : '' }}
+                  </v-card-title>
+                  <v-card-text class="text-h4 font-weight-medium grey--text text--darken-3">
+                     {{ item }}
+                  </v-card-text>
+               </v-card>
+            </v-col>
             <v-col cols="12">
                <v-card flat>
                   <v-card-title class="text-subtitle-1">
@@ -67,6 +80,7 @@
             ],
             data: [],
             loading: false,
+            countSchool: [],
          }
       },
    
@@ -79,6 +93,9 @@
       
       async mounted() {
          await this.getSchools()
+         await this.$axios.get('/countSchool').then((resp) => {
+            this.countSchool = resp.data.data
+         })
       },
    
       methods: {
