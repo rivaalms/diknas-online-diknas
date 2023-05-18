@@ -232,7 +232,6 @@
                      this.$store.dispatch('setAlert', {
                         type: 'info',
                         icon: 'mdi-information',
-                        color: 'cyan',
                         message: 'Kata sandi akun berhasil diubah'
                      })
                   }).finally(() => {

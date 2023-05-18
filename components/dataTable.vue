@@ -125,7 +125,7 @@
                   v-bind="attrs"
                   icon
                   class="me-2"
-                  color="light-blue darken-2"
+                  color="primary"
                   v-on="on"
                   @click="downloadFile(item)"
                >
@@ -247,13 +247,6 @@ export default {
          this.year = null
          this.dataHandler()
       },
-      
-      getColor(status) {
-         if (status === 1) return "grey lighten-4"
-         if (status === 2) return "green darken-1 white--text"
-         if (status === 3) return "deep-orange darken-1 white--text"
-         if (status === 4) return "cyan lighten-1 white--text"
-      },
 
       getFileExtension(name) {
          const fileName = name
@@ -285,13 +278,13 @@ export default {
 
                this.$store.dispatch('setSnackbar', {
                   text: 'File berhasil diunduh',
-                  color: 'green darken-3'
+                  color: 'success'
                })
             })
          } catch (e) {
             this.$store.dispatch('setSnackbar', {
                text: 'File tidak ditemukan',
-               color: 'red darken-2'
+               color: 'error'
             })
          } finally {
             this.$store.dispatch('showSnackbar')
