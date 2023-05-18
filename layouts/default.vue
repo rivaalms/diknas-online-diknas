@@ -28,9 +28,3 @@ export default {
   },
 }
 </script>
-
-<style scoped>
-.v-app {
-  background-color: #f5f5f5;
-}
-</style>
