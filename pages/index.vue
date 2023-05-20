@@ -8,7 +8,7 @@
       <v-row dense>
          <v-col
             v-for="item in schoolSupervisorCount"
-            :key="item"
+            :key="item.title"
          >
          <v-card flat>
             <v-card-title class="text-subtitle-1">
@@ -92,14 +92,18 @@ export default {
    },
 
    async mounted() {
-      await this.$axios.get(`/diknas/getData`).then((resp) => {
+      await this.$axios.get(`/getData`, {
+         params: {
+            status: 2,
+         }
+      }).then((resp) => {
          this.data = resp.data.data
          this.loading = false
       })
       await this.$axios.get(`/getCategories`).then((resp) => {
          this.categories = resp.data.data
       })
-      await this.$axios.get('/diknas/getSchoolSupervisorCount').then((resp) => {
+      await this.$axios.get('/getSchoolSupervisorCount').then((resp) => {
          this.schoolSupervisorCount = resp.data.data
       })
    },
@@ -107,7 +111,7 @@ export default {
    methods: {
       dataHandler(current, statusId, schoolId, year) {
          this.loading = true
-         this.$axios.get(`/diknas/getData`, {
+         this.$axios.get(`/getData`, {
             params: {
                page: current,
                status: statusId,

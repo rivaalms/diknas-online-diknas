@@ -198,7 +198,7 @@ export default {
          current: this.currentPage ? this.currentPage : 1,
          
          schoolId: null,
-         statusId: null,
+         statusId: 2,
          categoryId: null,
          dataTypeId: null,
          year: null,

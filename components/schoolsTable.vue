@@ -22,6 +22,17 @@
                @input="dataHandler()"
             ></v-autocomplete>
          </v-col>
+
+         <v-col cols="6" md="3">
+            <v-autocomplete
+               v-model="year"
+               :items="yearList"
+               label="Tahun Ajaran"
+               hide-details="auto"
+               class="pt-0 mt-0"
+               @input="dataHandler()"
+            ></v-autocomplete>
+         </v-col>
       </div>
 
       <!-- //SECTION - Schools table -->
@@ -117,6 +128,8 @@
             schools: [],
             schoolFilterLoading: null,
             schoolInputSync: null,
+            year: null,
+            yearList: [],
 
             studentHeaders: [
                {
@@ -179,6 +192,10 @@
          },
       },
 
+      async mounted() {
+         await this.getYearList()
+      },
+
       methods: {
          dialog(item) {
             const teacherItems = []
@@ -199,7 +216,14 @@
          },
 
          dataHandler() {
-            this.$emit('data-handler', this.current, this.schoolId)
+            this.$emit('data-handler', this.current, this.schoolId, this.year)
+         },
+
+         async getYearList() {
+            await this.$axios.get('/getStudentTeacherYearList').then((resp) => {
+               this.yearList = resp.data.data
+               this.year = this.yearList[0]
+            })
          }
       }
    }

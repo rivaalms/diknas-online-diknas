@@ -34,7 +34,7 @@
                         :from="data.from"
                         :to="data.to"
                         :total="data.total"
-                        @data-handler="(current, school_id) => getSchools(current, school_id)"
+                        @data-handler="(current, school_id, year) => getSchools(current, school_id, year)"
                      />
                   </v-card-text>
                </v-card>
@@ -81,6 +81,7 @@
             data: [],
             loading: false,
             countSchool: [],
+            currentYear: (new Date().getMonth() < 5) ? ((new Date().getFullYear()-1) + '-' + new Date().getFullYear()) : (new Date().getFullYear() + '-' + (new Date().getFullYear()+1))
          }
       },
    
@@ -99,12 +100,13 @@
       },
    
       methods: {
-         async getSchools(current, schoolId) {
+         async getSchools(current, schoolId, year) {
             this.loading = true
-            await this.$axios.get(`/diknas/getSchoolStats`, {
+            await this.$axios.get(`/getSchoolStats`, {
                params: {
                   page: current,
                   school: schoolId,
+                  year: year ?? this.currentYear,
                }
             }).then((resp) => {
                this.data = resp.data.data
