@@ -5,7 +5,7 @@
 >
    <v-card v-if="dialog">
       <v-card-title class="justify-space-between">
-         Detail Statistik {{ dialog.item.name }}
+         <span class="text-subtitle-1">Detail Statistik {{ dialog.item.name }}</span>
          <v-tooltip left color="black">
             <template #activator="{on, attrs}">
                <v-btn
@@ -37,23 +37,23 @@
             <v-tab-item class="py-4 px-1">
                <v-row>
                   <v-col cols="12" md="3">
-                     <v-card>
+                     <v-card flat outlined>
                         <v-card-text>
                            <p class="mb-2">Jumlah Siswa</p>
-                           <p class="text-h4 font-weight-medium grey--text text--darken-4">{{ dialog.item.total_students }}</p>
+                           <p class="text-h4 font-weight-medium grey--text text--darken-3">{{ dialog.item.total_students }}</p>
                         </v-card-text>
                      </v-card>
                   </v-col>
                   <v-col v-for="students in dialog.item.students" :key="students.grade" cols="12" md="3">
-                     <v-card>
+                     <v-card flat outlined>
                         <v-card-text>
                            <p class="mb-2">Kelas {{ students.grade }}</p>
-                           <p class="text-h4 font-weight-medium grey--text text--darken-4">{{ students.total }}</p>
+                           <p class="text-h4 font-weight-medium grey--text text--darken-3">{{ students.total }}</p>
                         </v-card-text>
                      </v-card>
                   </v-col>
                   <v-col cols="12" class="mt-6">
-                     <p class="text-h6">Data Siswa Berdasarkan Agama</p>
+                     <p class="text-subtitle-1">Data Siswa Berdasarkan Agama</p>
                      <v-data-table
                         hide-default-footer
                         :headers="dialog.studentHeader"
@@ -68,7 +68,7 @@
                </v-row>
             </v-tab-item>
 
-            <v-tab-item class="py px-1">
+            <v-tab-item class="py-4 px-1">
                <v-data-table
                   :headers="dialog.teacherHeader"
                   :items="dialog.teacherItem"
@@ -78,7 +78,7 @@
                <template #item.subject="{ item }">
                   {{ (item.subject === 'math') ? 'Matematika' 
                   : (item.subject === 'ind_lit') ? 'Bahasa Indonesia' 
-                  : (item.subject === 'eng_lit') ? 'Bahsa Inggris' 
+                  : (item.subject === 'eng_lit') ? 'Bahasa Inggris' 
                   : (item.subject === 'science') ? 'Ilmu Pengetahuan Alam' 
                   : (item.subject === 'social') ? 'Ilmu Pengetahuan Sosial' 
                   :(item.subject === 'civic') ? 'Pendidikan Kewarganegaraan' 

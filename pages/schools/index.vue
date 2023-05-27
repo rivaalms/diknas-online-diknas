@@ -1,14 +1,15 @@
 <template>
    <v-container fluid>
       <div>
-         <div class="d-flex justify-space-between align-center mt-5 mb-8">
-            <p class="text-h6 mb-0">Statistik Sekolah</p>
-            <app-breadcrumb/>
-         </div>
+         <page-header
+            :title="'Statistik Sekolah'"
+         />
          <v-row dense>
             <v-col
                v-for="(item, key) in countSchool"
                :key="key"
+               :cols="(key === 'total') ? 12 : 6"
+               sm="4"
             >
                <v-card flat>
                   <v-card-title class="text-subtitle-1">

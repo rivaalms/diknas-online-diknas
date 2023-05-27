@@ -3,11 +3,11 @@
    <app-alert/>
 
    <!-- //SECTION - Status Filter & New Data Btn -->
-   <div class="d-flex align-center flex-wrap">
+   <div class="d-flex flex-column flex-md-row align-md-center flex-wrap">
       <div class="me-2">
          <p class="mb-0 text-subtitle-2">Filter:</p>
       </div>
-      <v-col cols="3">
+      <v-col cols="12" md="3">
          <v-autocomplete
             v-model="schoolId"
             :items="schools"
@@ -80,7 +80,7 @@
             @input="dataHandler()"
          ></v-select>
       </v-col> -->
-      <v-col cols="3">
+      <v-col cols="12" md="3">
          <v-text-field
             v-model="year"
             label="Tahun ajaran"
@@ -124,7 +124,6 @@
                <v-btn
                   v-bind="attrs"
                   icon
-                  class="me-2"
                   color="primary"
                   v-on="on"
                   @click="downloadFile(item)"
@@ -139,7 +138,7 @@
    <!-- //!SECTION -->
 
    <!-- //SECTION - Table footer & Pagination -->
-   <div v-if="items" class="d-flex justify-space-between align-center">
+   <div v-if="items" class="d-flex flex-column flex-md-row justify-space-between align-center">
       <p class="text-caption mb-0">
          {{ from }}-{{ to }} dari {{ total }} data
       </p>
